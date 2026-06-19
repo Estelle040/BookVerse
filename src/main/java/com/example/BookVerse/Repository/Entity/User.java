@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.UuidGenerator;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,6 +22,7 @@ public class User {
     @Getter
     @Setter
     private String login;
+
     @Column(nullable = false)
     @Getter
     @Setter
@@ -31,5 +33,14 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    private List<ClubMember> memberships;
+
+    @OneToMany(mappedBy = "creator")
+    private List<VoteSession> createdVotes;
+
+    @OneToMany(mappedBy = "user")
+    private List<BookVote> votes;
 
 }
