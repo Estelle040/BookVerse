@@ -1,4 +1,4 @@
-package com.example.BookVerse.Controllers;
+package com.example.BookVerse.Exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

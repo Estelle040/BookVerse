@@ -3,9 +3,10 @@ package com.example.BookVerse.Repository.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.UuidGenerator;
 
-import java.net.URL;
 import java.util.List;
+import java.util.UUID;
 
 @Setter
 @Getter
@@ -13,8 +14,8 @@ import java.util.List;
 @Table
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @UuidGenerator
+    private UUID id;
 
     @Column(unique = true)
     private String title;
@@ -26,8 +27,12 @@ public class Book {
     private String description;
 
     @Column
-    private URL cover;
+    private String cover;
+
+    @Column
+    private int pages;
 
     @OneToMany(mappedBy = "book")
     private List<BookVote> votes;
+
 }

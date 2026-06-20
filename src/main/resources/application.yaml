@@ -1,11 +1,18 @@
+file:
+  upload-dir: uploads/books
+
 spring:
   application:
     name: BookVerse
   datasource:
     username: postgres
     password: 1234
-    url: jdbc:postgresql://localhost:5432/BookVerse
+    url: jdbc:postgresql://localhost:5432/BookVerse?currentSchema=public
     driver-class-name: org.postgresql.Driver
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   jpa:
     hibernate:
@@ -15,7 +22,6 @@ spring:
 
 server:
   port: 8080
-
 
 logging:
   level:

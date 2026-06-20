@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -43,13 +44,19 @@ public class JwtFilter extends OncePerRequestFilter {
         try {
             login = jwtService.extractLogin(token);
         } catch (Exception e) {
-            filterChain.doFilter(request, response);
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid or expired token");
             return;
         }
 
         if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-            UserDetails userDetails = userDetailsService.loadUserByUsername(login);
+            UserDetails userDetails;
+            try {
+                userDetails = userDetailsService.loadUserByUsername(login);
+            } catch (UsernameNotFoundException exception) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token user not found");
+                return;
+            }
 
             UsernamePasswordAuthenticationToken auth =
                     new UsernamePasswordAuthenticationToken(
