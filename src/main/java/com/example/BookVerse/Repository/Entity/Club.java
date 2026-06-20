@@ -3,6 +3,7 @@ package com.example.BookVerse.Repository.Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 import java.util.List;
@@ -26,7 +27,7 @@ public class Club {
     @JoinColumn(name = "owner_user_id")
     private User ownerUser;
 
-    @Column(nullable = false)
+    @CreationTimestamp
     private Date created;
 
     @Column(nullable = false)

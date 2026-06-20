@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -54,6 +55,21 @@ public class BookController {
         BookDTO.SaveBookDTO dto = BookMapper.parseBookData(data);
 
         return ResponseEntity.ok(bookService.saveBook(dto, cover));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<BookDTO.ListBookDTO>> findAll() {
+        return ResponseEntity.ok(bookService.getAllBooks());
+    }
+
+    @GetMapping("/find/{title}")
+    public ResponseEntity<List<BookDTO.ListBookDTO>> findByTitle(@PathVariable String title) {
+        return ResponseEntity.ok(bookService.getBooksByTitle(title));
+    }
+
+    @GetMapping("/find/{author}")
+    public ResponseEntity<List<BookDTO.ListBookDTO>> findByAuthor(@PathVariable String author) {
+        return ResponseEntity.ok(bookService.getBooksByAuthor(author));
     }
 
 }

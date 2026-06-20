@@ -31,8 +31,3 @@ public class Meeting {
     private MeetingStatus status;
 }
 
-enum MeetingStatus {
-    PLANNED,
-    DONE,
-    CANCELLED
-}

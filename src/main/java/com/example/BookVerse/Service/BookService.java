@@ -1,5 +1,6 @@
 package com.example.BookVerse.Service;
 
+import com.example.BookVerse.Mapper.BookMapper;
 import com.example.BookVerse.Repository.BookRepository;
 import com.example.BookVerse.Repository.Entity.Book;
 import com.example.BookVerse.dto.BookDTO;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -14,6 +16,7 @@ import java.util.UUID;
 public class BookService {
     private final BookRepository bookRepository;
     private final FileStorageService fileStorageService;
+    private final BookMapper bookMapper;
 
     public Book uploadCover(UUID book_id, MultipartFile file) {
         Book book = bookRepository.findById(book_id)
@@ -36,5 +39,26 @@ public class BookService {
             book = uploadCover(book.getId(), file);
         }
         return book;
+    }
+
+    public List<BookDTO.ListBookDTO> getAllBooks() {
+        return bookRepository.findAll()
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+    public List<BookDTO.ListBookDTO> getBooksByTitle(String title) {
+        return bookRepository.findByTitleContainingIgnoreCase(title)
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
+    }
+
+    public List<BookDTO.ListBookDTO> getBooksByAuthor(String author) {
+        return bookRepository.findByTitleContainingIgnoreCase(author)
+                .stream()
+                .map(bookMapper::toDto)
+                .toList();
     }
 }
