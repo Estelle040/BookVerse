@@ -19,6 +19,8 @@ spring:
       ddl-auto: update
     show-sql: true
 
+  liquibase:
+    enabled: false
 
 server:
   port: 8080

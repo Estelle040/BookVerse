@@ -39,8 +39,12 @@ public class VoteSession {
     @Enumerated(EnumType.STRING)
     private VoteStatus status;
 
-    @OneToMany(mappedBy = "voteSession")
-    private List<BookVote> votes;
+    @OneToMany(
+            mappedBy = "voteSession",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<VoteOption> votes;
 
 }
 
