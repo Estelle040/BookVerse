@@ -1,0 +1,32 @@
+file:
+  upload-dir: uploads/books
+
+spring:
+  application:
+    name: BookVerse
+  datasource:
+    username: postgres
+    password: 1234
+    url: jdbc:postgresql://localhost:5432/BookVerse?currentSchema=public
+    driver-class-name: org.postgresql.Driver
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  liquibase:
+    enabled: false
+
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    com.example.BookVerse: DEBUG
+
