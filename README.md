@@ -40,6 +40,8 @@
 - Spring Data JPA (Hibernate)
 - PostgreSQL
 - Maven
+- Docker (планируется)
+- Liquibase (планируется)
 
 ---
 
