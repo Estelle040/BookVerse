@@ -1,5 +1,6 @@
 package com.example.BookVerse.Service;
 
+import com.example.BookVerse.Mapper.BookMapper;
 import com.example.BookVerse.Mapper.VoteMapper;
 import com.example.BookVerse.Repository.*;
 import com.example.BookVerse.Repository.Entity.*;
@@ -24,6 +25,7 @@ public class VoteService {
     private final BookRepository bookRepository;
     private final VoteOptionRepository voteOptionRepository;
     private final VoteMapper voteMapper;
+    private final BookVoteRepository bookVoteRepository;
 
     public VoteSession startVote(VoteDTO.startVote voteDTO) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -80,6 +82,66 @@ public class VoteService {
                 .toList();
     }
 
+    public BookVote voteBook(Long voteId, long optionId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        User user = userRepository.findByLogin(username).orElseThrow(() -> new RuntimeException("User Not Found"));
 
+        VoteSession voteSession = voteSessionRepository.findById(voteId).orElseThrow(() -> new RuntimeException("Vote not found"));
+
+        VoteOption voteOption = voteOptionRepository.findById(optionId).orElseThrow(() -> new RuntimeException("Option not found"));
+
+        boolean alreadyVoted = bookVoteRepository
+                .existsByUserAndVoteSession(user, voteSession);
+
+        if (alreadyVoted) {
+            throw new RuntimeException("User already voted");
+        }
+
+        if(voteSession.getStatus() == VoteStatus.WAITING || voteSession.getStatus() == VoteStatus.FINISHED) {
+            throw new RuntimeException("Vote is not started or already finished, check time and date.");
+        }
+
+        BookVote vote = new BookVote();
+        vote.setUser(user);
+        vote.setVoteSession(voteSession);
+        vote.setVoteOption(voteOption);
+        vote.setVotedAt(LocalDateTime.now());
+
+        bookVoteRepository.save(vote);
+        return vote;
+    }
+
+    public VoteDTO.VoteResultDTO getVoteResult(Long voteId) {
+
+        VoteSession vote = voteSessionRepository.findById(voteId)
+                .orElseThrow(() -> new RuntimeException("Vote not found"));
+
+        List<VoteDTO.VoteResultDTO.OptionResult> results =
+                bookVoteRepository.countVotesByVoteId(voteId)
+                        .stream()
+                        .map(row -> new VoteDTO.VoteResultDTO.OptionResult(
+                                (String) row[0],
+                                (Long) row[1]
+                        ))
+                        .toList();
+
+        return new VoteDTO.VoteResultDTO(vote.getTitle(), results);
+    }
+
+    @Transactional
+    public VoteDTO.VoteResultDTO finishVote(Long voteId) {
+
+        VoteSession vote = voteSessionRepository.findById(voteId)
+                .orElseThrow(() -> new RuntimeException("Vote not found"));
+
+        if (vote.getStatus() != VoteStatus.ACTIVE) {
+            throw new RuntimeException("Vote is not active");
+        }
+
+        vote.setStatus(VoteStatus.FINISHED);
+
+        return getVoteResult(voteId);
+    }
 
 }

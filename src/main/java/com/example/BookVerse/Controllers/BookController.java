@@ -21,6 +21,7 @@ import java.util.UUID;
 public class BookController {
 
     private final BookService bookService;
+    private final BookMapper bookMapper;
 
     @PostMapping(
             value = "/{id}/cover",
@@ -37,24 +38,11 @@ public class BookController {
     }
 
 
-    @Operation(
-            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                    content = @Content(
-                            mediaType = MediaType.MULTIPART_FORM_DATA_VALUE
-                    )
-            )
-    )
-    @PostMapping(
-            value = "/save",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    public ResponseEntity<Book> save(
-            @RequestParam("data") String data,
-            @RequestPart(value = "cover", required = false) MultipartFile cover
+    @PostMapping(value = "/save")
+    public ResponseEntity<BookDTO.SaveBookDTO> save(
+            @RequestBody BookDTO.SaveBookDTO bookDTO
     ) {
-        BookDTO.SaveBookDTO dto = BookMapper.parseBookData(data);
-
-        return ResponseEntity.ok(bookService.saveBook(dto, cover));
+        return ResponseEntity.ok(bookMapper.toSaveBookDTO(bookService.saveBook(bookDTO)));
     }
 
     @GetMapping("/all")

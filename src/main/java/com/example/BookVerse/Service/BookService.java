@@ -28,16 +28,13 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book saveBook(BookDTO.SaveBookDTO saveBookDTO, MultipartFile file) {
+    public Book saveBook(BookDTO.SaveBookDTO saveBookDTO) {
         Book book = new Book();
         book.setTitle(saveBookDTO.title());
         book.setAuthor(saveBookDTO.author());
         book.setPages(saveBookDTO.pages());
         book.setDescription(saveBookDTO.description());
         book = bookRepository.save(book);
-        if(file != null && !file.isEmpty()) {
-            book = uploadCover(book.getId(), file);
-        }
         return book;
     }
 

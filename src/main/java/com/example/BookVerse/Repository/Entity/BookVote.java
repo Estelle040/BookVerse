@@ -30,8 +30,8 @@ public class BookVote {
     private VoteSession voteSession;
 
     @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @JoinColumn(name = "vote_option_id")
+    private VoteOption voteOption;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
