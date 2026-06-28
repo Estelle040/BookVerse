@@ -6,6 +6,7 @@ import com.example.BookVerse.Service.VoteService;
 import com.example.BookVerse.dto.VoteDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,11 +20,13 @@ public class VoteController {
     private final VoteService voteService;
     private final VoteMapper voteMapper;
 
+
     @PostMapping("/start")
     public ResponseEntity<VoteDTO.startVote> startVote(@RequestBody VoteDTO.startVote voteDTO) {
         VoteSession session = voteService.startVote(voteDTO);
         return ResponseEntity.ok(voteMapper.toStartVoteDTO(session));
     }
+
 
     @PostMapping("/add/{vote_id}/{book_id}")
     public ResponseEntity<String> addVoteOption(@PathVariable UUID book_id, @PathVariable long vote_id) {

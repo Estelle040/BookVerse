@@ -18,16 +18,17 @@ public class VoteMapper {
         );
     }
 
-    public VoteDTO.shortVoteDTO toShortVoteDTO(VoteSession voteSession) {
+    public VoteDTO.shortVoteDTO toShortVoteDTO(VoteSession session) {
         return new VoteDTO.shortVoteDTO(
-                voteSession.getTitle(),
-                voteSession.getDescription(),
-                voteSession.getVotes()
-                        .stream()
+                session.getId(),
+                session.getTitle(),
+                session.getDescription(),
+                session.getVotes().stream()
                         .map(option -> option.getBook().getTitle())
                         .toList(),
-                voteSession.getStartDate(),
-                voteSession.getEndDate()
+                session.getStartDate(),
+                session.getEndDate(),
+                session.getStatus().name()
         );
     }
 

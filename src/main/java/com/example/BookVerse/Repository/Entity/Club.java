@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -38,4 +39,12 @@ public class Club {
 
     @OneToMany(mappedBy = "club")
     private List<VoteSession> voteSessions;
+
+    @ManyToMany
+    @JoinTable(
+            name = "club_books",
+            joinColumns = @JoinColumn(name = "club_id"),
+            inverseJoinColumns = @JoinColumn(name = "book_id")
+    )
+    private List<Book> books = new ArrayList<>();
 }

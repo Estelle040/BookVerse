@@ -17,5 +17,5 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember,Long> {
 
     List<ClubMember> findByUser(User user);
 
-    Optional<ClubMember> findByUserAndStatus(User user, MemberStatus status);
+    Optional<ClubMember> findByClubAndUser(Club club, User user);
 }

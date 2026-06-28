@@ -9,6 +9,7 @@ public class BookMapper {
 
     public BookDTO.SaveBookDTO toSaveBookDTO(Book book) {
         return new BookDTO.SaveBookDTO(
+                book.getId(),
                 book.getTitle(),
                 book.getAuthor(),
                 book.getPages(),
@@ -18,6 +19,7 @@ public class BookMapper {
 
     public BookDTO.ListBookDTO toDto(Book book) {
         return new BookDTO.ListBookDTO(
+                book.getId(),
                 book.getTitle(),
                 book.getAuthor(),
                 book.getPages(),
