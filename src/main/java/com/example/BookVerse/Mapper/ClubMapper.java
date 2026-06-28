@@ -16,10 +16,10 @@ public class ClubMapper {
 
     public ClubDTO.ListClubDto toListClubDTO(Club club){
         return new ClubDTO.ListClubDto(
+                club.getId(),
                 club.getName(),
                 club.getDescription(),
                 club.isPrivate()
         );
     }
-
 }

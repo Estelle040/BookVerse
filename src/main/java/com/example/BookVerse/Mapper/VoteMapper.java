@@ -1,5 +1,6 @@
 package com.example.BookVerse.Mapper;
 
+import com.example.BookVerse.Repository.Entity.BookVote;
 import com.example.BookVerse.Repository.Entity.VoteOption;
 import com.example.BookVerse.Repository.Entity.VoteSession;
 import com.example.BookVerse.dto.VoteDTO;
@@ -17,11 +18,24 @@ public class VoteMapper {
         );
     }
 
-    public VoteDTO.shortVoteDTO toShortVoteDTO(VoteSession voteSession) {
+    public VoteDTO.shortVoteDTO toShortVoteDTO(VoteSession session) {
         return new VoteDTO.shortVoteDTO(
-                voteSession.getTitle(),
-                voteSession.getDescription(),
-                voteSession.getVotes()
+                session.getId(),
+                session.getTitle(),
+                session.getDescription(),
+                session.getVotes().stream()
+                        .map(option -> option.getBook().getTitle())
+                        .toList(),
+                session.getStartDate(),
+                session.getEndDate(),
+                session.getStatus().name()
+        );
+    }
+
+    public VoteDTO.votedBookDTO toVotedBookDTO(BookVote bookVote) {
+        return new VoteDTO.votedBookDTO(
+                bookVote.getVoteOption().getVoteSession().getTitle(),
+                bookVote.getVoteOption().getBook().getTitle()
         );
     }
 }

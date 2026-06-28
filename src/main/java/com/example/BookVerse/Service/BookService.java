@@ -17,7 +17,6 @@ public class BookService {
     private final BookRepository bookRepository;
     private final FileStorageService fileStorageService;
     private final BookMapper bookMapper;
-
     public Book uploadCover(UUID book_id, MultipartFile file) {
         Book book = bookRepository.findById(book_id)
                 .orElseThrow(() ->new RuntimeException("Book not found"));
@@ -28,16 +27,13 @@ public class BookService {
         return bookRepository.save(book);
     }
 
-    public Book saveBook(BookDTO.SaveBookDTO saveBookDTO, MultipartFile file) {
+    public Book saveBook(BookDTO.SaveBookDTO saveBookDTO) {
         Book book = new Book();
         book.setTitle(saveBookDTO.title());
         book.setAuthor(saveBookDTO.author());
         book.setPages(saveBookDTO.pages());
         book.setDescription(saveBookDTO.description());
         book = bookRepository.save(book);
-        if(file != null && !file.isEmpty()) {
-            book = uploadCover(book.getId(), file);
-        }
         return book;
     }
 
@@ -56,9 +52,22 @@ public class BookService {
     }
 
     public List<BookDTO.ListBookDTO> getBooksByAuthor(String author) {
-        return bookRepository.findByTitleContainingIgnoreCase(author)
+        return bookRepository.findByAuthorContainingIgnoreCase(author)
                 .stream()
                 .map(bookMapper::toDto)
                 .toList();
+    }
+
+    public BookDTO.ListBookDTO updateBook(UUID id, BookDTO.UpdateBookDTO updateBookDTO) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Book not found"));
+
+        book.setTitle(updateBookDTO.title());
+        book.setAuthor(updateBookDTO.author());
+        book.setPages(updateBookDTO.pages());
+        book.setDescription(updateBookDTO.description());
+
+        book = bookRepository.save(book);
+        return bookMapper.toDto(book);
     }
 }

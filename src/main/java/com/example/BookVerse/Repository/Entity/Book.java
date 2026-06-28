@@ -31,8 +31,4 @@ public class Book {
 
     @Column
     private int pages;
-
-    @OneToMany(mappedBy = "book")
-    private List<BookVote> votes;
-
 }

@@ -7,7 +7,17 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 @Entity
-@Table
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(
+                        columnNames = {
+                                "user_id",
+                                "club_id",
+                                "book_id"
+                        }
+                )
+        }
+)
 @Getter
 @Setter
 public class ReadingProgress {
@@ -28,4 +38,6 @@ public class ReadingProgress {
     private int current_page;
     @Column
     private LocalDateTime updated_at;
+    @Enumerated(EnumType.STRING)
+    private ReadingStatus status;
 }

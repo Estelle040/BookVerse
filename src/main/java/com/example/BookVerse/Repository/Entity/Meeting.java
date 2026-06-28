@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class Meeting {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -29,5 +30,9 @@ public class Meeting {
     private String location; // как виртуальное пространство, так и локация на карте
     @Enumerated(EnumType.STRING)
     private MeetingStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
 }
 
